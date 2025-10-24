@@ -1,51 +1,39 @@
-/**
- * Store layer.
- * Defaults to in-memory. If SUPABASE env vars exist, you can swap to a Supabase implementation later.
- */
-export type Ticket = {
-  id: string;
-  title: string;
-  event: string;
-  minPrice: number;
-  endsAt: number;
-  seller: string;
-  verified: boolean;
-  topBid?: { amount: number; bidder: string; at: number };
-  status: 'OPEN'|'CLOSED';
-};
-export type Wallet = { user: string; balance: number };
+// lib/store.ts
+import { create } from 'zustand'
 
-export const tickets: Ticket[] = [
-  { id: '1', title: 'Coldplay - Floor', event: 'Coldplay Mumbai', minPrice: 5000, endsAt: Date.now()+1000*60*30, seller: 'seller1', verified: true, status: 'OPEN' },
-  { id: '2', title: 'Arijit Singh - Gold', event: 'Arijit Mumbai', minPrice: 3000, endsAt: Date.now()+1000*60*50, seller: 'seller2', verified: false, status: 'OPEN' }
-];
-
-export const wallets: Record<string, Wallet> = {
-  buyer1: { user: 'buyer1', balance: 10000 },
-  buyer2: { user: 'buyer2', balance: 2000 }
-};
-
-export function createTicket(data: {title:string; event:string; minPrice:number; endsAt:number; seller:string; verified:boolean}) {
-  const t: Ticket = { id: String(Date.now()), ...data, status: 'OPEN' };
-  tickets.push(t);
-  return t;
+interface WalletState {
+  balance: number
+  deposit: (amount: number) => void
+  withdraw: (amount: number) => boolean
+  reset: () => void
 }
 
-export function placeBid(ticketId: string, bidder: string, amount: number) {
-  const t = tickets.find(x => x.id === ticketId);
-  if (!t) throw new Error('Ticket not found');
-  if (t.status !== 'OPEN') throw new Error('Auction closed');
-  const min = t.topBid ? t.topBid.amount + 100 : t.minPrice;
-  if (amount < min) throw new Error('Bid too low');
-  const w = wallets[bidder] || { user: bidder, balance: 0 };
-  if (w.balance < amount) throw new Error('Insufficient wallet balance');
-  t.topBid = { amount, bidder, at: Date.now() };
-  return t;
+interface TicketState {
+  tickets: any[]
+  addTicket: (ticket: any) => void
+  removeTicket: (id: string) => void
+  setTickets: (tickets: any[]) => void
+  reset: () => void
 }
 
-export function closeAuction(ticketId: string) {
-  const t = tickets.find(x => x.id === ticketId);
-  if (!t) throw new Error('Ticket not found');
-  t.status = 'CLOSED';
-  return t;
-}
+export const useWalletStore = create<WalletState>((set, get) => ({
+  balance: 0,
+  deposit: (amount) => set({ balance: get().balance + amount }),
+  withdraw: (amount) => {
+    if (get().balance >= amount) {
+      set({ balance: get().balance - amount })
+      return true
+    }
+    return false
+  },
+  reset: () => set({ balance: 0 }),
+}))
+
+export const useTicketStore = create<TicketState>((set, get) => ({
+  tickets: [],
+  addTicket: (ticket) => set({ tickets: [...get().tickets, ticket] }),
+  removeTicket: (id) =>
+    set({ tickets: get().tickets.filter((t) => t.id !== id) }),
+  setTickets: (tickets) => set({ tickets }),
+  reset: () => set({ tickets: [] }),
+}))
