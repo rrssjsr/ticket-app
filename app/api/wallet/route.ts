@@ -1,9 +1,5 @@
-import { NextResponse } from 'next/server';
-import { wallets } from '@/lib/store';
+import { NextResponse } from 'next/server'
 
-export async function GET(req: Request) {
-  const { searchParams } = new URL(req.url);
-  const user = searchParams.get('user') ?? 'buyer1';
-  const w = wallets[user] || { user, balance: 0 };
-  return NextResponse.json(w);
+export async function GET() {
+  return NextResponse.json({ success: true, balance: 0 })
 }
