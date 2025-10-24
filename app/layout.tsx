@@ -1,19 +1,26 @@
+import Link from 'next/link';
+import './globals.css';
+
 export const metadata = {
-  title: "Ticket App",
-  description: "Student ticket marketplace with auctions"
+  title: 'Ticket App',
+  description: 'Student ticket marketplace with auctions'
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body style={{maxWidth:960, margin:'0 auto', padding:16, fontFamily:'ui-sans-serif, system-ui'}}>
-        <header style={{display:'flex', gap:12, alignItems:'center', marginBottom:24}}>
-          <a href="/">Home</a>
-          <a href="/tickets">Tickets</a>
-          <a href="/wallet">Wallet</a>
-          <a href="/sell">Sell</a>
+      <body>
+        <header className="border-b bg-white">
+          <nav className="container flex items-center gap-4">
+            <Link href="/" className="font-semibold">Ticket App</Link>
+            <div className="flex gap-3 text-sm text-gray-700">
+              <Link href="/tickets">Tickets</Link>
+              <Link href="/wallet">Wallet</Link>
+              <Link href="/sell">Sell</Link>
+            </div>
+          </nav>
         </header>
-        {children}
+        <main className="container py-8">{children}</main>
       </body>
     </html>
   );

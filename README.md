@@ -1,16 +1,12 @@
-Deployed on Vercel. No env vars required. In-memory mock store.
+Ticket App — Complete Scaffold
+- Light theme (Tailwind)
+- Mock wallet
+- Optional Supabase later (env vars not required)
 
 Pages:
-- /tickets            list auctions
-- /tickets/[id]       bid page
-- /sell               create auction
-- /wallet             mock wallet
+- /tickets — list auctions
+- /tickets/[id] — bid
+- /sell — create auction
+- /wallet — deposit/withdraw (mock)
 
-API:
-- GET/POST /api/tickets
-- GET /api/auctions/:id
-- POST /api/bids { ticketId, bidder, amount }
-- GET /api/wallet?user=buyer1
-- POST /api/wallet/deposit { user, amount }
-- POST /api/wallet/withdraw { user, amount }
-- POST /api/auctions/close { id }
+Deploy: push this root to Vercel (framework: Next.js). No env vars needed.

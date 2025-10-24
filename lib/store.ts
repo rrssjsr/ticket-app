@@ -1,3 +1,7 @@
+/**
+ * Store layer.
+ * Defaults to in-memory. If SUPABASE env vars exist, you can swap to a Supabase implementation later.
+ */
 export type Ticket = {
   id: string;
   title: string;
@@ -11,7 +15,6 @@ export type Ticket = {
 };
 export type Wallet = { user: string; balance: number };
 
-// Ephemeral in-memory store per server instance.
 export const tickets: Ticket[] = [
   { id: '1', title: 'Coldplay - Floor', event: 'Coldplay Mumbai', minPrice: 5000, endsAt: Date.now()+1000*60*30, seller: 'seller1', verified: true, status: 'OPEN' },
   { id: '2', title: 'Arijit Singh - Gold', event: 'Arijit Mumbai', minPrice: 3000, endsAt: Date.now()+1000*60*50, seller: 'seller2', verified: false, status: 'OPEN' }
