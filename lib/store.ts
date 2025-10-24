@@ -37,3 +37,7 @@ export const useTicketStore = create<TicketState>((set, get) => ({
   setTickets: (tickets) => set({ tickets }),
   reset: () => set({ tickets: [] }),
 }))
+
+// Temporary direct export for server routes expecting 'tickets'
+export const tickets = []
+
