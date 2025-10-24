@@ -2,8 +2,7 @@
 import { useState } from 'react';
 import useSWR from 'swr';
 import { useParams } from 'next/navigation';
-
-const fetcher = (url: string) => fetch(url).then(res => res.json());
+const fetcher = (url: string) => fetch(url).then(r=>r.json());
 
 export default function Ticket() {
   // @ts-ignore
@@ -18,6 +17,7 @@ export default function Ticket() {
       <h1>{t.title}</h1>
       <p>Event: {t.event}</p>
       <p>Verified: {t.verified ? 'Yes' : 'No'}</p>
+      <p>Status: {t.status}</p>
       <p>Top bid: ₹{t.topBid ? t.topBid.amount : t.minPrice}</p>
       <form onSubmit={async e => {
         e.preventDefault();
@@ -29,6 +29,7 @@ export default function Ticket() {
         <input type="number" value={amount} onChange={e=>setAmount(e.target.value)} placeholder="Bid amount" style={{marginRight:8}}/>
         <button type="submit">Place bid</button>
       </form>
+      <p style={{marginTop:16}}><a href="/tickets">Back</a></p>
     </main>
   );
 }
